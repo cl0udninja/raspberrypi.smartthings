@@ -4,7 +4,7 @@ I'm trying to get my hands dirty with SmartThings and Raspberry Pi. I'm planning
 
 ## Projects
 
-* [Raspberry Pi Monitor](devicetypes/cl0udninja/raspberry-pi.src/README.md)
+* [Raspberry Pi Monitor](devicetypes/cl0udninja/raspberry-pi-monitor.src/README.md)
 
 ## Licensing
 
