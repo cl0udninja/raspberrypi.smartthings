@@ -55,16 +55,13 @@ metadata {
         valueTile("cpuFrequency", "device.cpuFrequency", width: 2, height: 1) {
         	state "default", label:'${currentValue}\nMHz'
         }
-        valueTile("freeMemoryLabel", "device.label.freeMemory", width: 4, height: 1) {
+        valueTile("freeMemoryLabel", "device.label.freeMemory", width: 3, height: 1) {
         	state "default", label:'Free memory'
         }
         valueTile("freeMemory", "device.freeMemory", width: 2, height: 1) {
         	state "default", label:'${currentValue}\nMB'
         }
-        valueTile("freeMemoryPercentLabel", "device.label.freeMemoryPercent", width: 4, height: 1) {
-        	state "default", label:'Free memory'
-        }
-        valueTile("freeMemoryPercent", "device.freeMemoryPercent", width: 2, height: 1) {
+        valueTile("freeMemoryPercent", "device.freeMemoryPercent", width: 1, height: 1) {
             state "freeMemoryPercent", label:'${currentValue}%',
             backgroundColors:[
                 [value: 0, color: "#44b621"],
@@ -100,7 +97,7 @@ metadata {
         
         main "cpuTemperature"
         
-        details(["cpuTemperature", "cpuFrequencyLabel", "cpuFrequency", "freeMemoryLabel", "freeMemory", "freeMemoryPercentLabel", "freeMemoryPercent", "cpuCoreVoltage", "modelName", "boardType", "javaVersion", "hostname", "refresh"])
+        details(["cpuTemperature", "cpuFrequencyLabel", "cpuFrequency", "freeMemoryLabel", "freeMemory", "freeMemoryPercent", "cpuCoreVoltage", "modelName", "boardType", "javaVersion", "hostname", "refresh"])
     }
 }
 
