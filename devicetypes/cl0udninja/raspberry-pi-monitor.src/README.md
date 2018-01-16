@@ -20,8 +20,10 @@ The device handler is capable of displaying a couple of information about your R
 * Click on *Settings* and add a new GitHub repo (cl0udninja/raspberrypi.smartthings/master)
 * Click on *Update from Repo* and select *raspberrypi.smartthings(master)*
 * In the *New* panel on the right select *devicetypes/cl0udninja/raspberry-pi-monitor.src/raspberry-pi-monitor.groovy* and Publish it
+* Click on the new Device Handler and click on the *Publish* button and select *For Me*
 * Click on *My Devices* and click on *New Device*
 * Enter the Name you want, and enter anything in the *Device Network Id* you want. It will be overwritten with the Hex value of your Pi's IP address and your monitor's port.
+* For type select *Raspberry Pi Monitor*
 * Select the Location and Hub and click *Create*
 * Once created click on it in the *Device List* and edit the *Preferences* (see below). You can do the same in the SmartThings app as well. Enter the Pi's IP address and the monitor apps's port (default is 8080)
 
