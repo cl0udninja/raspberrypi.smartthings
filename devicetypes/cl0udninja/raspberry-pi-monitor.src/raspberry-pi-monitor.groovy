@@ -10,11 +10,6 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
- preferences {
-        input("ip", "string", title:"IP Address", description: "192.168.1.150", defaultValue: "192.168.1.150" ,required: true, displayDuringSetup: true)
-        input("port", "string", title:"Port", description: "80", defaultValue: "80" , required: true, displayDuringSetup: true)
-}
-
 metadata {
 	definition (name: "Raspberry Pi Monitor", namespace: "cl0udninja", author: "Janos Elohazi") {
 		capability "Polling"
@@ -22,6 +17,8 @@ metadata {
 		capability "Temperature Measurement"
         capability "Sensor"
         
+        attribute "ip", "string"
+        attribute "port", "string"
         attribute "cpuFrequency", "number"       
         attribute "freeMemory", "number"
         attribute "cpuCoreVoltage", "number"
@@ -39,6 +36,7 @@ metadata {
 	tiles(scale: 2) {
 		valueTile("cpuTemperature", "device.cpuTemperature", width: 6, height: 4, canChangeIcon: true) {
             state "cpuTemperature", label:'${currentValue}°C',
+            icon: "http://storage.googleapis.com/storage.cl0ud.ninja/raspberry-pi-logo.png",
             backgroundColors:[
             	[value: 25, color: "#153591"],
                 [value: 35, color: "#1e9cbb"],
@@ -48,12 +46,6 @@ metadata {
                 [value: 76, color: "#d04e00"],
                 [value: 77, color: "#bc2323"]
             ]
-        }
-        valueTile("cpuFrequencyLabel", "device.label.cpuFrequency", width: 4, height: 1) {
-        	state "default", label:'CPU'
-        }
-        valueTile("cpuFrequency", "device.cpuFrequency", width: 2, height: 1) {
-        	state "default", label:'${currentValue}\nMHz'
         }
         valueTile("freeMemoryLabel", "device.label.freeMemory", width: 3, height: 1) {
         	state "default", label:'Free memory'
@@ -97,23 +89,20 @@ metadata {
         
         main "cpuTemperature"
         
-        details(["cpuTemperature", "cpuFrequencyLabel", "cpuFrequency", "freeMemoryLabel", "freeMemory", "freeMemoryPercent", "cpuCoreVoltage", "modelName", "boardType", "javaVersion", "hostname", "refresh"])
+        details(["cpuTemperature", "freeMemoryLabel", "freeMemory", "freeMemoryPercent", "cpuCoreVoltage", "modelName", "boardType", "javaVersion", "hostname", "refresh"])
     }
 }
 
 // parse events into attributes
 def parse(description) {
-    log.debug "Parsing '${description.json}'"
-	def msg = parseLanMessage(description.body)
+    log.debug "Parsing '${description?.json}'"
+	def msg = parseLanMessage(description?.body)
     log.debug "Msg ${msg}"
-	def json = parseJson(description.body)
+	def json = parseJson(description?.body)
     log.debug "JSON '${json}'"
     
     if (json.containsKey("cpuTemperature")) {
     	sendEvent(name: "cpuTemperature", value: json.cpuTemperature)
-    }
-    if (json.containsKey("cpuFrequency")) {
-    	sendEvent(name: "cpuFrequency", value: json.cpuFrequency/1000/1000)
     }
     if (json.containsKey("freeMemory")) {
     	sendEvent(name: "freeMemory", value: (json.freeMemory/1024/1024).toDouble().round(2))
@@ -154,13 +143,15 @@ def refresh() {
 }
 
 private getPiInfo() {
-	def iphex = convertIPtoHex(ip)
-  	def porthex = convertPortToHex(port)
-  	device.deviceNetworkId = "$iphex:$porthex"
+	log.debug "Device network id: ${device.deviceNetworkId}"
+    def parts = device.deviceNetworkId.split(":")
+    if (parts.length !=2) {
+    	log.warn "Can't figure out ip and port for device: ${device.id}"
+    }
+    def ip = convertHexToIP(parts[0])
+    def port = convertHexToInt(parts[1])
     
-    log.debug "Device network id: ${device.deviceNetworkId}"
-    
-	def uri = "/api/pi"
+    def uri = "/api/pi"
     def headers=[:]
     headers.put("HOST", "${ip}:${port}")
     headers.put("Accept", "application/json")
@@ -175,14 +166,36 @@ private getPiInfo() {
     hubAction 
 }
 
-private String convertIPtoHex(ipAddress) {
-	log.debug "converting ${ip} to hex"
+private String convertIPtoHex(ip) {
+	log.debug "convertIPtoHex ${ip} to hex"
     String hex = ipAddress.tokenize( '.' ).collect {  String.format( '%02x', it.toInteger() ) }.join()
     return hex
 }
 
 private String convertPortToHex(port) {
-	log.debug "converting ${port} to hex"
+	log.debug "convertPortToHex ${port} to hex"
 	String hexport = port.toString().format( '%04x', port.toInteger() )
     return hexport
+}
+
+private Integer convertHexToInt(hex) {
+    return Integer.parseInt(hex,16)
+}
+
+private String convertHexToIP(hex) {
+    return [convertHexToInt(hex[0..1]),convertHexToInt(hex[2..3]),convertHexToInt(hex[4..5]),convertHexToInt(hex[6..7])].join(".")
+}
+def sync(ip, port) {
+	log.debug "sync ${ip} ${port}"
+	def existingIp = getDataValue("ip")
+	def existingPort = getDataValue("port")
+	if (ip && ip != existingIp) {
+		updateDataValue("ip", ip)
+	}
+	if (port && port != existingPort) {
+		updateDataValue("port", port)
+	}
+    def ipHex = convertIPToHex(ip)
+    def portHex = convertPortToHex(port)
+    device.deviceNetworkId = "${ipHex}:${portHex}"
 }
