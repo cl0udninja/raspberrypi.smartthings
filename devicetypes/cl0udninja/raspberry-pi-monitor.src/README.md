@@ -20,7 +20,6 @@ The device handler is capable of displaying a couple of information about your R
 * Click on *Settings* and add a new GitHub repo (cl0udninja/raspberrypi.smartthings/master)
 * Click on *Update from Repo* and select *raspberrypi.smartthings(master)*
 * In the *New* panel on the right select *devicetypes/cl0udninja/raspberry-pi-monitor.src/raspberry-pi-monitor.groovy* and Publish it
-* Click on the new Device Handler and click on the *Publish* button and select *For Me*
 * Install the SmartApp for UPnP discovery in the IDE. Follow the steps [here](..\..\..\smartapps\cl0udninja\raspberry-pi-upnp-service-manager.src\README.md)
 
 # Acknowledgements
