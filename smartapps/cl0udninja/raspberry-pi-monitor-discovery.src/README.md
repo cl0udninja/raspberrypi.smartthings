@@ -4,16 +4,16 @@ Installing this smartapp makes it possible to discover Raspberry Pis running the
 
 # Installation
 
-* Install the monitor on your Pi. It's necessary to get the information to show in the device handler. See link above
+* Install the monitor on your Pi. It's necessary to get the information to show in the device handler.
 * Log into the [SmartThings IDE](https://graph.api.smartthings.com)
 * Click on *My SmartApps*
 * Click on *Settings* and add a new GitHub repo (cl0udninja/raspberrypi.smartthings/master)
 * Click on *Update from Repo* and select *raspberrypi.smartthings(master)*
-* In the *New* panel on the right select *smartapps/cl0udninja/raspberry-pi-upnp-service-manager.src/raspberry-pi-upnp-service-manager.groovy* and Publish it
+* In the *New* panel on the right select *smartapps/cl0udninja/raspberry-pi-monitor-discovery.src/raspberry-pi-monitor-discovery.groovy* and Publish it
 * Open the SmartThings app on your phone, and navigate to `Automation/SmartApps`
-* Tap `+ Add a SmartApp`, select `My Apps` and from there the `Raspberry Pi UPnP Service Manager`
+* Tap `+ Add a SmartApp`, select `My Apps` and from there the `Raspberry Pi Monitor Discovery`
 * Wait until your device(s) are found and tap `Select Devices` and then the `Done` in the top right corner
-* For each found device a thing is added with the name Raspberry Pi Monitor. You can see the hostname after the information was pulled from the Pi and rename your device.
+* For each found device a thing is added with the name `Raspberry Pi Monitor`. You can see the hostname after the information was pulled from the Pi and rename your device.
 * After the things are added you might need to wait a couple of seconds before they start to work
 
 Enjoy!

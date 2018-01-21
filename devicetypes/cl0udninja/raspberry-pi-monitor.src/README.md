@@ -14,13 +14,13 @@ The device handler is capable of displaying a couple of information about your R
 
 # Installation
 
-* Install the monitor on your Pi. It's necessary to get the information to show in the device handler. See link above
+* Install the [monitor](https://github.com/cl0udninja/raspberrypi.monitor) on your Pi. It's necessary to get the information to show in the device handler. See link above
 * Log into the [SmartThings IDE](https://graph.api.smartthings.com)
 * Click on *My Device Handlers*
 * Click on *Settings* and add a new GitHub repo (cl0udninja/raspberrypi.smartthings/master)
 * Click on *Update from Repo* and select *raspberrypi.smartthings(master)*
 * In the *New* panel on the right select *devicetypes/cl0udninja/raspberry-pi-monitor.src/raspberry-pi-monitor.groovy* and Publish it
-* Install the SmartApp for UPnP discovery in the IDE. Follow the steps [here](..\..\..\smartapps\cl0udninja\raspberry-pi-upnp-service-manager.src\README.md)
+* Install the SmartApp for UPnP discovery in the IDE. Follow the steps [here](..\..\..\smartapps\cl0udninja\raspberry-pi-monitor-discovery.src\README.md)
 
 # Acknowledgements
 
