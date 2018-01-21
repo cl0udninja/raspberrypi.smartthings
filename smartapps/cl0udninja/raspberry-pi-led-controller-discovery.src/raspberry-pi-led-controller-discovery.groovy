@@ -14,21 +14,21 @@
  *
  */
 definition(
-		name: "Raspberry Pi UPnP Service Manager",
+		name: "Raspberry Pi LED Controller Discovery",
 		namespace: "cl0udninja",
 		author: "Janos Elohazi",
-		description: "Raspberry Pi UPnP Service Manager for convenient device discovery",
+		description: "Raspberry Pi LED Controller Discovery",
 		category: "SmartThings Labs",
-		iconUrl: "http://storage.googleapis.com/storage.cl0ud.ninja/raspberry-pi-logo.png",
-		iconX2Url: "http://storage.googleapis.com/storage.cl0ud.ninja/raspberry-pi-logo.png",
-		iconX3Url: "http://storage.googleapis.com/storage.cl0ud.ninja/raspberry-pi-logo.png")
+		iconUrl: "https://storage.googleapis.com/storage.cl0ud.ninja/LEDStringLights.png",
+		iconX2Url: "https://storage.googleapis.com/storage.cl0ud.ninja/LEDStringLights.png",
+		iconX3Url: "https://storage.googleapis.com/storage.cl0ud.ninja/LEDStringLights.png")
 
 preferences {
-	page(name: "deviceDiscovery", title: "Raspberry Pi UPnP Device Setup", content: "deviceDiscovery")
+	page(name: "deviceDiscovery", title: "Raspberry Pi LED Controller Discovery", content: "deviceDiscovery")
 }
 
 def getSearchTarget() {
-	return "urn:schemas-upnp-org:device:RaspberryPi:1"
+	return "urn:schemas-upnp-org:device:RaspberryPiLedSwitch:1"
 }
 
 def deviceDiscovery() {
@@ -145,8 +145,8 @@ def addDevices() {
 
 		if (!d) {
 			log.debug "Creating Raspberry Pi Monitor with dni: ${selectedDevice.value.networkAddress}:${selectedDevice.value.deviceAddress}"
-			addChildDevice("cl0udninja", "Raspberry Pi Monitor", "${selectedDevice.value.networkAddress}:${selectedDevice.value.deviceAddress}", selectedDevice?.value.hub, [
-				"label": selectedDevice?.value?.name ?: "Raspberry Pi Monitor",
+			addChildDevice("cl0udninja", "Raspberry Pi LED Switch", "${selectedDevice.value.networkAddress}:${selectedDevice.value.deviceAddress}", selectedDevice?.value.hub, [
+				"label": selectedDevice?.value?.name ?: "Raspberry Pi LED Switch",
 				"data": [
 					"mac": selectedDevice.value.mac,
 					"ip": selectedDevice.value.networkAddress,
