@@ -26,10 +26,14 @@ metadata {
 	}
 
 	tiles() {
-		standardTile("toggleLed", "device.switch", width: 3, height: 2, canChangeIcon: true) {
-			state "off", label: 'Off', icon: "st.Electronics.electronics18", backgroundColor: "#ffffff", nextState: "on", action: "turnOnLed"
-			state "on", label: 'On', icon: "st.Electronics.electronics18", backgroundColor: "#79b821", nextState: "off", action: "turnOffLed"
-		}
+    	multiAttributeTile(name:"toggleLed", type: "lighting", width: 3, height: 3, canChangeIcon: true) {
+			tileAttribute ("device.switch", key: "PRIMARY_CONTROL") {
+				attributeState "on", label:'${name}', action:"switch.off", icon:"st.Seasonal Winter.seasonal-winter-011", backgroundColor:"#00a0dc", nextState:"turningOff"
+				attributeState "off", label:'${name}', action:"switch.on", icon:"st.Seasonal Winter.seasonal-winter-011", backgroundColor:"#ffffff", nextState:"turningOn"
+				attributeState "turningOn", label:'${name}', action:"switch.off", icon:"st.Seasonal Winter.seasonal-winter-011", backgroundColor:"#00a0dc", nextState:"turningOff"
+				attributeState "turningOff", label:'${name}', action:"switch.on", icon:"st.Seasonal Winter.seasonal-winter-011", backgroundColor:"#ffffff", nextState:"turningOn"
+			}
+    	}
         standardTile("refresh", "device.refresh", inactiveLabel: false, width: 1, height: 1, decoration: "flat") {
         	state "default", action:"refresh.refresh", icon: "st.secondary.refresh"
         }
@@ -40,7 +44,7 @@ metadata {
     }
 }
 
-def turnOnLed() {
+def on() {
 	log.debug "Device network id: ${device.deviceNetworkId}"
     def parts = device.deviceNetworkId.split(":")
     if (parts.length !=2) {
@@ -55,19 +59,17 @@ def turnOnLed() {
     headers.put("Accept", "application/json")
     headers.put("Content-type", "application/json")
     def body = "{\"pinState\":\"HIGH\"}"
-    def hubAction = new physicalgraph.device.HubAction(
+    sendHubCommand(new physicalgraph.device.HubAction(
         method: "POST",
         path: uri,
 		headers: headers,
         body: body,
-        device.deviceNetworkId,
-        [callback: getLedState]
-    )
-    log.debug "Turning on led ${hubAction}"
-    hubAction
+        device.deviceNetworkId
+    ))
+    sendEvent(name: "switch", value: "on")
 }
 
-def turnOffLed() {
+def off() {
 	log.debug "Device network id: ${device.deviceNetworkId}"
     def parts = device.deviceNetworkId.split(":")
     if (parts.length !=2) {
@@ -82,16 +84,14 @@ def turnOffLed() {
     headers.put("Accept", "application/json")
     headers.put("Content-type", "application/json")
     def body = "{\"pinState\":\"LOW\"}"
-    def hubAction = new physicalgraph.device.HubAction(
+   	sendHubCommand(new physicalgraph.device.HubAction(
         method: "POST",
         path: uri,
 		headers: headers,
         body: body,
-        device.deviceNetworkId,
-        [callback: getLedState]
-    )
-    log.debug "Turning off led ${hubAction}"
-    hubAction
+        device.deviceNetworkId
+    ))
+    sendEvent(name: "switch", value: "off")
 }
 
 // parse events into attributes
