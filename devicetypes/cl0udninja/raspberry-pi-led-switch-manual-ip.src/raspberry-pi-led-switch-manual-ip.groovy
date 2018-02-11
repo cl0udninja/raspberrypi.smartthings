@@ -1,6 +1,6 @@
 /**
  *  Raspberry Pi LED Switch
-
+ *
  *  Licensed under the GNU v3 (https://www.gnu.org/licenses/gpl-3.0.en.html)
  *
  *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
@@ -8,8 +8,12 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
+preferences {		
+	input("ip", "string", title:"IP Address", description: "192.168.1.150", defaultValue: "192.168.1.150" ,required: true, displayDuringSetup: true)		
+	input("port", "string", title:"Port", description: "80", defaultValue: "80" , required: true, displayDuringSetup: true)		
+}
 metadata {
-	definition (name: "Raspberry Pi LED Switch", namespace: "cl0udninja", author: "Janos Elohazi") {
+	definition (name: "Raspberry Pi LED Switch (Manual IP)", namespace: "cl0udninja", author: "Janos Elohazi") {
 		capability "Polling"
 		capability "Refresh"
 		capability "Actuator"
@@ -43,13 +47,8 @@ metadata {
 }
 
 def on() {
-	log.debug "Device network id: ${device.deviceNetworkId}"
-    def parts = device.deviceNetworkId.split(":")
-    if (parts.length !=2) {
-    	log.warn "Can't figure out ip and port for device: ${device.id}"
-    }
-    def ip = convertHexToIP(parts[0])
-    def port = convertHexToInt(parts[1])
+	def iphex = convertIPtoHex(ip)
+    def porthex = convertPortToHex(port)
     
     def uri = "/api/led"
     def headers=[:]
@@ -62,19 +61,14 @@ def on() {
         path: uri,
 		headers: headers,
         body: body,
-        device.deviceNetworkId
+        "${ipHex}:${portHex}"
     ))
     sendEvent(name: "switch", value: "on")
 }
 
 def off() {
-	log.debug "Device network id: ${device.deviceNetworkId}"
-    def parts = device.deviceNetworkId.split(":")
-    if (parts.length !=2) {
-    	log.warn "Can't figure out ip and port for device: ${device.id}"
-    }
-    def ip = convertHexToIP(parts[0])
-    def port = convertHexToInt(parts[1])
+	def iphex = convertIPtoHex(ip)
+    def porthex = convertPortToHex(port)
     
     def uri = "/api/led"
     def headers=[:]
@@ -87,7 +81,7 @@ def off() {
         path: uri,
 		headers: headers,
         body: body,
-        device.deviceNetworkId
+        "${ipHex}:${portHex}"
     ))
     sendEvent(name: "switch", value: "off")
 }
@@ -122,14 +116,9 @@ def refresh() {
 }
 
 private getLedState() {
-	log.debug "Device network id: ${device.deviceNetworkId}"
-    def parts = device.deviceNetworkId.split(":")
-    if (parts.length !=2) {
-    	log.warn "Can't figure out ip and port for device: ${device.id}"
-    }
-    def ip = convertHexToIP(parts[0])
-    def port = convertHexToInt(parts[1])
-    
+	def iphex = convertIPtoHex(ip)
+    def porthex = convertPortToHex(port)
+
     def uri = "/api/led"
     def headers=[:]
     headers.put("HOST", "${ip}:${port}")
@@ -138,15 +127,15 @@ private getLedState() {
         method: "GET",
         path: uri,
 		headers: headers,
-        device.deviceNetworkId,
+        "${ipHex}:${portHex}",
         [callback: parse]
     )
     log.debug "Getting Pi data ${hubAction}"
     hubAction 
 }
 
-private String convertIPtoHex(ip) {
-	log.debug "convertIPtoHex ${ip} to hex"
+private String convertIPtoHex(ipAddress) {
+	log.debug "convertIPtoHex ${ipAddress} to hex"
     String hex = ipAddress.tokenize( '.' ).collect {  String.format( '%02x', it.toInteger() ) }.join()
     return hex
 }
@@ -163,18 +152,4 @@ private Integer convertHexToInt(hex) {
 
 private String convertHexToIP(hex) {
     return [convertHexToInt(hex[0..1]),convertHexToInt(hex[2..3]),convertHexToInt(hex[4..5]),convertHexToInt(hex[6..7])].join(".")
-}
-def sync(ip, port) {
-	log.debug "sync ${ip} ${port}"
-	def existingIp = getDataValue("ip")
-	def existingPort = getDataValue("port")
-	if (ip && ip != existingIp) {
-		updateDataValue("ip", ip)
-	}
-	if (port && port != existingPort) {
-		updateDataValue("port", port)
-	}
-    def ipHex = convertIPToHex(ip)
-    def portHex = convertPortToHex(port)
-    device.deviceNetworkId = "${ipHex}:${portHex}"
 }
