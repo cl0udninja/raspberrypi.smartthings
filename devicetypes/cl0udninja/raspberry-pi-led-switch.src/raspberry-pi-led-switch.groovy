@@ -17,6 +17,7 @@ metadata {
 
 		command "turnOffLed"
         command "turnOnLed"
+        command "poll"
 	}
 
 	simulator {
@@ -40,6 +41,27 @@ metadata {
         
         details(["toggleLed", "refresh"])
     }
+}
+
+def installed() {
+	log.debug "installed"
+	initialize();
+}
+
+def updated() {
+	log.debug "updated"
+	initialize();
+}
+
+def ping() {
+	log.debug "ping"
+	poll()
+}
+
+def initialize() {
+	log.debug "initialize"
+	sendEvent(name: "checkInterval", value: 60 * 10, data: [protocol: "cloud"], displayed: false)
+    refresh()
 }
 
 def on() {

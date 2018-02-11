@@ -27,6 +27,8 @@ metadata {
         attribute "javaVersion", "string"
         attribute "hostname", "string"
         attribute "serialNumber", "string"
+        
+        command "poll"
 	}
 
 	simulator {
@@ -93,6 +95,26 @@ metadata {
     }
 }
 
+def installed() {
+	log.debug "installed"
+	initialize();
+}
+
+def updated() {
+	log.debug "updated"
+	initialize();
+}
+
+def ping() {
+	log.debug "ping"
+	poll()
+}
+
+def initialize() {
+	log.debug "initialize"
+	sendEvent(name: "checkInterval", value: 60 * 10, data: [protocol: "cloud"], displayed: false)
+    refresh()
+}
 // parse events into attributes
 def parse(description) {
     log.debug "Parsing '${description?.json}'"
