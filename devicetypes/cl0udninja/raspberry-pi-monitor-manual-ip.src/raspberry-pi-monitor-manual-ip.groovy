@@ -37,7 +37,7 @@ metadata {
 
 	tiles(scale: 2) {
 		valueTile("cpuTemperature", "device.cpuTemperature", width: 6, height: 4, canChangeIcon: true) {
-            state "cpuTemperature", label:'${currentValue}°C',
+            state "cpuTemperature", label:'${currentValue}°',
 			icon: "http://storage.googleapis.com/storage.cl0ud.ninja/raspberry-pi-logo.png"
 			backgroundColors:[
             	[value: 25, color: "#153591"],
@@ -104,7 +104,12 @@ def parse(description) {
     log.debug "JSON '${json}'"
     
     if (json.containsKey("cpuTemperature")) {
-    	sendEvent(name: "cpuTemperature", value: json.cpuTemperature)
+    	if (getTemperatureScale() == "C") {
+	    	sendEvent(name: "cpuTemperature", value: json.cpuTemperature)
+        } else {
+        	def fahrenheit = json.cpuTemperature * 9 / 5 + 32
+            sendEvent(name: "cpuTemperature", value: fahrenheit)
+        }
     }
     if (json.containsKey("freeMemory")) {
     	sendEvent(name: "freeMemory", value: (json.freeMemory/1024/1024).toDouble().round(2))
