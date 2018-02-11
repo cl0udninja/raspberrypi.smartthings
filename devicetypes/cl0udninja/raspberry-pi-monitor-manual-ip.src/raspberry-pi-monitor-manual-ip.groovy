@@ -20,6 +20,7 @@ metadata {
 		capability "Refresh"
 		capability "Temperature Measurement"
         capability "Sensor"
+        capability "Health Check"
         
         attribute "cpuFrequency", "number"       
         attribute "freeMemory", "number"

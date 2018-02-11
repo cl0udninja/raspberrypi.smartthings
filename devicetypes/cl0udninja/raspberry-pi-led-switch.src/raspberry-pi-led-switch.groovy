@@ -14,6 +14,7 @@ metadata {
 		capability "Refresh"
 		capability "Actuator"
 		capability "Switch"
+        capability "Health Check"
 
 		command "turnOffLed"
         command "turnOnLed"

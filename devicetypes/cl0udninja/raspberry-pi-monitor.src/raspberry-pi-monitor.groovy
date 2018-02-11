@@ -16,6 +16,7 @@ metadata {
 		capability "Refresh"
 		capability "Temperature Measurement"
         capability "Sensor"
+        capability "Health Check"
         
         attribute "ip", "string"
         attribute "port", "string"
