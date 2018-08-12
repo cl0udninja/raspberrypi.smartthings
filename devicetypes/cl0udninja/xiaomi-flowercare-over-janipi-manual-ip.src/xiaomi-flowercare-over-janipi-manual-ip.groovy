@@ -33,7 +33,17 @@ metadata {
 
 	// UI tile definitions
 	tiles(scale: 2) {
-        valueTile("temperature", "device.temperature", width: 6, height: 4, canChangeIcon: true) {
+        valueTile("moisture", "device.humidity", inactiveLabel: false, decoration: "flat", width: 6, height: 4) {
+			state "default", label:'${currentValue}%', icon:"st.Outdoor.outdoor5",
+            backgroundColors:[
+				[value: 0, color: "#725438"],
+                [value: 14, color: "#96773d"],
+				[value: 15, color: "#44b621"],
+				[value: 60, color: "#9db621"],
+				[value: 100, color: "#ff1e1e"]                                     
+            ]
+		}
+        valueTile("temperature", "device.temperature", width: 2, height: 2) {
             state "temperature", label:'${currentValue}°', icon:"st.Weather.weather2",
             backgroundColors:[
 				[value: 0, color: "#153591"],
@@ -49,16 +59,6 @@ metadata {
 				[value: 84, color: "#f1d801"],
 				[value: 95, color: "#d04e00"],
 				[value: 96, color: "#bc2323"]                                      
-            ]
-		}
-        valueTile("moisture", "device.humidity", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
-			state "default", label:'${currentValue}%', icon:"st.Outdoor.outdoor5",
-            backgroundColors:[
-				[value: 0, color: "#725438"],
-                [value: 14, color: "#96773d"],
-				[value: 15, color: "#44b621"],
-				[value: 60, color: "#9db621"],
-				[value: 100, color: "#ff1e1e"]                                     
             ]
 		}
         valueTile("light", "device.light", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
@@ -87,7 +87,7 @@ metadata {
 			state "default", action:"refresh.refresh", icon:"st.secondary.refresh"
         }            
 		main(["moisture"])
-		details(["temperature", "moisture", "light", "fertility", "battery", "firmware", "refresh"])
+		details(["moisture", "temperature", "light", "fertility", "battery", "refresh",  "firmware"])
     }
 }
 
