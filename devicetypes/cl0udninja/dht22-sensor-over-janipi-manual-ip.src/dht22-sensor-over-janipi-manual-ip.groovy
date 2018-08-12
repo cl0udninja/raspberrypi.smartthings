@@ -13,15 +13,12 @@ preferences {
 	input("port", "string", title:"Port", description: "80", defaultValue: "80" , required: true, displayDuringSetup: true)		
 }
 metadata {
-	definition (name: "Xiaomi FlowerCare over JaniPi(Manual IP)", namespace: "cl0udninja", author: "Janos Elohazi") {
+	definition (name: "DHT22 sensor over JaniPi(Manual IP)", namespace: "cl0udninja", author: "Janos Elohazi") {
         capability "Polling"
 		capability "Refresh"
 		capability "Sensor"
-        capability "Health Check"
-        capability "Battery"
    		capability "Relative Humidity Measurement"
 		capability "Temperature Measurement"
-		capability "Illuminance Measurement"
         
         command "poll"
 
@@ -37,57 +34,28 @@ metadata {
             state "temperature", label:'${currentValue}°', icon:"st.Weather.weather2",
             backgroundColors:[
 				[value: 0, color: "#153591"],
-				[value: 5, color: "#1e9cbb"],
-				[value: 10, color: "#90d2a7"],
-				[value: 15, color: "#44b621"],
-				[value: 20, color: "#f1d801"],
-				[value: 25, color: "#d04e00"],
-				[value: 30, color: "#bc2323"],
-				[value: 44, color: "#1e9cbb"],
-				[value: 59, color: "#90d2a7"],
-				[value: 74, color: "#44b621"],
-				[value: 84, color: "#f1d801"],
-				[value: 95, color: "#d04e00"],
-				[value: 96, color: "#bc2323"]                                      
+                [value: 5, color: "#1e9cbb"],
+                [value: 10, color: "#90d2a7"],
+                [value: 15, color: "#44b621"],
+                [value: 20, color: "#f1d801"],
+                [value: 25, color: "#d04e00"],
+                [value: 30, color: "#bc2323"],
+                [value: 44, color: "#1e9cbb"],
+                [value: 59, color: "#90d2a7"],
+                [value: 74, color: "#44b621"],
+                [value: 84, color: "#f1d801"],
+                [value: 95, color: "#d04e00"],
+                [value: 96, color: "#bc2323"]                                    
             ]
 		}
-        valueTile("moisture", "device.humidity", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
-			state "default", label:'${currentValue}%', icon:"st.Outdoor.outdoor5",
-            backgroundColors:[
-				[value: 0, color: "#725438"],
-                [value: 14, color: "#96773d"],
-				[value: 15, color: "#44b621"],
-				[value: 60, color: "#9db621"],
-				[value: 100, color: "#ff1e1e"]                                     
-            ]
+        valueTile("humidity", "device.humidity", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
+			state "default", label:'${currentValue}%', icon:"st.Weather.weather12"
 		}
-        valueTile("light", "device.light", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
-			state "default", label:'${currentValue} lux', icon:"st.Weather.weather14",
-            backgroundColors:[
-				[value: 0, color: "#777775"],
-				[value: 100000, color: "#ffff8c"]
-            ]
-		}
-        valueTile("fertility", "device.fertility", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
-			state "default", label:'${currentValue} µS/cm', icon:"st.Outdoor.outdoor3",
-            backgroundColors:[
-				[value: 0, color: "#72471c"],
-				[value: 350, color: "#e2cc24"],
-				[value: 2000, color: "#73e224"],
-				[value: 10000, color: "#e22424"]                                     
-            ]
-		}
-        valueTile("battery", "device.battery", decoration: "flat", inactiveLabel: false, width: 3, height: 1) {
-			state "default", label:'${currentValue}% battery', unit:"", icon:"st.Appliances.appliances17"
-		}
-        valueTile("firmware", "device.firmware", decoration: "flat", inactiveLabel: false, width: 3, height: 1) {
-			state "default", label:'v${currentValue}', unit:""
-		}
-        valueTile("refresh", "device.refresh", inactiveLabel: false, decoration: "flat", width: 3, height: 2) {
+        standardTile("refresh", "device.refresh", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
 			state "default", action:"refresh.refresh", icon:"st.secondary.refresh"
         }            
-		main(["moisture"])
-		details(["temperature", "moisture", "light", "fertility", "battery", "firmware", "refresh"])
+		main(["temperature"])
+		details(["temperature", "humidity", "refresh"])
     }
 }
 
@@ -130,11 +98,8 @@ def parse(description) {
     } else {
     	sendEvent(name: "temperature", value: json.temperatureC * 9 / 5 + 32)
     }
-    sendEvent(name: "humidity", value: json.moisture)
+    sendEvent(name: "humidity", value: json.humidity)
     sendEvent(name: "light", value: json.light)
-    sendEvent(name: "fertility", value: json.fertility)
-    sendEvent(name: "battery", value: json.batteryPercent)
-    sendEvent(name: "firmware", value: json.firmwareVersion)
 }
 
 // handle commands
@@ -152,7 +117,7 @@ private getTemp() {
 	def iphex = convertIPtoHex(ip)
     def porthex = convertPortToHex(port)
 
-    def uri = "/api/flower"
+    def uri = "/api/temperature"
     def headers=[:]
     headers.put("HOST", "${ip}:${port}")
     headers.put("Accept", "application/json")
@@ -163,7 +128,7 @@ private getTemp() {
         "${ipHex}:${portHex}",
         [callback: parse]
     )
-    log.debug "Getting FlowerCare data ${hubAction}"
+    log.debug "Getting DHT22 data ${hubAction}"
     hubAction
 }
 
