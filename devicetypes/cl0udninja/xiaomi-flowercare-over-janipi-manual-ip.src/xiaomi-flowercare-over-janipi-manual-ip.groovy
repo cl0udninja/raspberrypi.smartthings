@@ -54,7 +54,8 @@ metadata {
         valueTile("moisture", "device.humidity", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
 			state "default", label:'${currentValue}%', icon:"st.Outdoor.outdoor5",
             backgroundColors:[
-				[value: 0, color: "#000000"],
+				[value: 0, color: "#725438"],
+                [value: 14, color: "#96773d"],
 				[value: 15, color: "#44b621"],
 				[value: 60, color: "#9db621"],
 				[value: 100, color: "#ff1e1e"]                                     
