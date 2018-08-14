@@ -104,7 +104,7 @@ def ping() {
 
 def initialize() {
 	log.debug "initialize"
-	sendEvent(name: "checkInterval", value: 60 * 10, data: [protocol: "cloud"], displayed: false)
+	sendEvent(name: "checkInterval", value: 60 * 45, data: [protocol: "cloud"], displayed: false)
     refresh()
 }
 
