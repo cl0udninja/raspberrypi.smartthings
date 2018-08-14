@@ -19,10 +19,6 @@ metadata {
 		capability "Actuator"
 		capability "Switch"
         capability "Health Check"
-
-		command "turnOffLed"
-        command "turnOnLed"
-        command "poll"
 	}
 
 	simulator {

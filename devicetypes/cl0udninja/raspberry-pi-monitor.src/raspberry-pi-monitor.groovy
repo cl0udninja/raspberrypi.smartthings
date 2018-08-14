@@ -28,8 +28,6 @@ metadata {
         attribute "javaVersion", "string"
         attribute "hostname", "string"
         attribute "serialNumber", "string"
-        
-        command "poll"
 	}
 
 	simulator {

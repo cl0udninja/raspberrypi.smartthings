@@ -17,14 +17,10 @@ metadata {
         capability "Polling"
 		capability "Refresh"
 		capability "Sensor"
-        capability "Health Check"
         capability "Battery"
    		capability "Relative Humidity Measurement"
 		capability "Temperature Measurement"
 		capability "Illuminance Measurement"
-        
-        command "poll"
-
 	}
 
 	simulator {
