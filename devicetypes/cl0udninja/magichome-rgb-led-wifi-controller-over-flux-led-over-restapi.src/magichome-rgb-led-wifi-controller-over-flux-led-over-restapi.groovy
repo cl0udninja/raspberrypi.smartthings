@@ -86,7 +86,7 @@ def parse(description) {
 	def json = parseJson(description?.body)
     log.debug "JSON '${json}'"
    
-    sendEvent(name: "switch", value: json.status)
+    sendEvent(name: "switch", value: json.status.toLowerCase())
 }
 
 def parseFull(description) {
@@ -101,7 +101,7 @@ def parseFull(description) {
 	def json = parseJson(description?.body)
     log.debug "JSON '${json}'"
    
-    sendEvent(name: "switch", value: json.status)
+    sendEvent(name: "switch", value: json.status.toLowerCase())
 	sendEvent(name: "color", value: convertRGBtoHex(json.red, json.green, json.blue));
     sendEvent(name: "level", value: 100);
 }
