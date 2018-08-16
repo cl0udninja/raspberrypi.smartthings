@@ -40,7 +40,7 @@ metadata {
             ]
 		}
         valueTile("temperature", "device.temperature", width: 2, height: 2) {
-            state "temperature", label:'${currentValue}°', icon:"st.Weather.weather2",
+            state "temperature", icon:"st.Weather.weather2",
             backgroundColors:[
 				[value: 0, color: "#153591"],
 				[value: 5, color: "#1e9cbb"],
@@ -58,14 +58,14 @@ metadata {
             ]
 		}
         valueTile("light", "device.light", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
-			state "default", label:'${currentValue} lux', icon:"st.Weather.weather14",
+			state "default", icon:"st.Weather.weather14",
             backgroundColors:[
 				[value: 0, color: "#777775"],
 				[value: 100000, color: "#ffff8c"]
             ]
 		}
         valueTile("fertility", "device.fertility", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
-			state "default", label:'${currentValue} µS/cm', icon:"st.Outdoor.outdoor3",
+			state "default", icon:"st.Outdoor.outdoor3",
             backgroundColors:[
 				[value: 0, color: "#72471c"],
 				[value: 350, color: "#e2cc24"],
@@ -73,6 +73,14 @@ metadata {
 				[value: 10000, color: "#e22424"]                                     
             ]
 		}
+
+		valueTile("temperatureText", "device.temperature", decoration: "flat", inactiveLabel: false, width: 2, height: 1) {
+			state "default", label:'${currentValue}°'}
+        valueTile("lightText", "device.light", decoration: "flat", inactiveLabel: false, width: 2, height: 1) {
+			state "default", label:'${currentValue} lux'}
+        valueTile("fertilityText", "device.fertility", decoration: "flat", inactiveLabel: false, width: 2, height: 1) {
+			state "default", label:'${currentValue}  µS/cm'}
+            
         valueTile("battery", "device.battery", decoration: "flat", inactiveLabel: false, width: 3, height: 1) {
 			state "default", label:'${currentValue}% battery', unit:"", icon:"st.Appliances.appliances17"
 		}
@@ -83,7 +91,10 @@ metadata {
 			state "default", action:"refresh.refresh", icon:"st.secondary.refresh"
         }            
 		main(["moisture"])
-		details(["moisture", "temperature", "light", "fertility", "battery", "refresh",  "firmware"])
+		details(["moisture",
+        		 "temperature", "light", "fertility",
+                 "temperatureText", "lightText", "fertilityText",
+                 "battery", "refresh",  "firmware"])
     }
 }
 
