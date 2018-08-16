@@ -89,7 +89,7 @@ metadata {
 
 def installed() {
 	log.debug "installed"
-	initialize();
+	updated()
 }
 
 def updated() {
@@ -104,7 +104,8 @@ def ping() {
 
 def initialize() {
 	log.debug "initialize"
-	sendEvent(name: "checkInterval", value: 60 * 30, data: [protocol: "cloud"], displayed: false)
+    unschedule()
+    runEvery1Hour(refresh)
     refresh()
 }
 
