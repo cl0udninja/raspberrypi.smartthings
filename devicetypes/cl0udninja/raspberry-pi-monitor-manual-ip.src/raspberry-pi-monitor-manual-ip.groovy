@@ -90,7 +90,7 @@ metadata {
         	state "default", action:"refresh.refresh", icon: "st.secondary.refresh"
         }
         
-        main "cpuTemperature"
+        main "freeMemoryPercent"
         
         details(["cpuTemperature", "freeMemoryLabel", "freeMemory", "freeMemoryPercent", "cpuCoreVoltage", "modelName", "boardType", "javaVersion", "hostname", "refresh"])
     }
