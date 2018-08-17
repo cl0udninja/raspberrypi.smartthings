@@ -61,6 +61,8 @@ metadata {
 			state "default", icon:"st.Weather.weather14",
             backgroundColors:[
 				[value: 0, color: "#777775"],
+                [value: 3000, color: "#fca00c"],
+                [value: 6000, color: "#fffd93"],
 				[value: 100000, color: "#ffff8c"]
             ]
 		}
