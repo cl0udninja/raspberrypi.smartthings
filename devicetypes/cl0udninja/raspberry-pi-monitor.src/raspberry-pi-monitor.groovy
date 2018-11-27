@@ -28,6 +28,7 @@ metadata {
         attribute "javaVersion", "string"
         attribute "hostname", "string"
         attribute "serialNumber", "string"
+        attribute "cpuTemperature", "number"
 	}
 
 	simulator {

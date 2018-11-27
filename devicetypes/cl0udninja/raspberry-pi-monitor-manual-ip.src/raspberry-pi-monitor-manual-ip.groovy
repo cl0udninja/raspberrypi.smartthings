@@ -22,6 +22,7 @@ metadata {
         capability "Sensor"
         capability "Health Check"
         
+        attribute "cpuTemperature", "number"
         attribute "cpuFrequency", "number"       
         attribute "freeMemory", "number"
         attribute "cpuCoreVoltage", "number"
