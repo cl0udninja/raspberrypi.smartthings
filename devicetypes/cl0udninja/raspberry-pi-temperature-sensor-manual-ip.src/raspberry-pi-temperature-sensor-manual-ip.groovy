@@ -18,7 +18,6 @@ metadata {
         capability "Polling"
 		capability "Refresh"
 		capability "Sensor"
-        capability "Health Check"
 	}
 
 	simulator {
