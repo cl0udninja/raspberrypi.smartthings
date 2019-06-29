@@ -10,7 +10,8 @@
  */
 preferences {		
 	input("ip", "string", title:"IP Address", description: "192.168.1.150", defaultValue: "192.168.1.150" ,required: true, displayDuringSetup: true)		
-	input("port", "string", title:"Port", description: "80", defaultValue: "80" , required: true, displayDuringSetup: true)		
+	input("port", "string", title:"Port", description: "80", defaultValue: "80" , required: true, displayDuringSetup: true)
+    input("selector", "string", title: "Flower Care ID (LEVANDER|PLUMERIA)", required: true, displayDuringSetup:true);
 }
 metadata {
 	definition (name: "Xiaomi FlowerCare over JaniPi(Manual IP)", namespace: "cl0udninja", author: "Janos Elohazi") {
@@ -162,7 +163,7 @@ private getTemp() {
 	def iphex = convertIPtoHex(ip)
     def porthex = convertPortToHex(port)
 
-    def uri = "/api/flower"
+    def uri = "/api/flower/${selector}"
     def headers=[:]
     headers.put("HOST", "${ip}:${port}")
     headers.put("Accept", "application/json")

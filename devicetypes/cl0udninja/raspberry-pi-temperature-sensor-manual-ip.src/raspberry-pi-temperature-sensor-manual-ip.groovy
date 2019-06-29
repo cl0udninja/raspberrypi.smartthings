@@ -87,9 +87,13 @@ def parse(description) {
     log.debug "JSON '${json}'"
     
     if (getTemperatureScale() == "C") {
-    	sendEvent(name: "temperature", value: json.celsius)
+    	if (json.celsius != null) {
+        	sendEvent(name: "temperature", value: json.celsius)
+        }
     } else {
-    	sendEvent(name: "temperature", value: json.fahrenheit)
+    	if (json.fahrenheit != null) {
+	    	sendEvent(name: "temperature", value: json.fahrenheit)
+        }
     }
 }
 

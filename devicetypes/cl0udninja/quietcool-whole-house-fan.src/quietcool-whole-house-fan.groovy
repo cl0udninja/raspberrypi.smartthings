@@ -22,14 +22,16 @@ metadata {
     
     command "fanLow"
     command "fanHigh"
+    
+    attribute "fanSpeed", "string"
 
 	simulator {
 		// TODO: define status and reply messages here
 	}
 
 	tiles() {
-    	multiAttributeTile(name:"switch", type: "lighting", width: 3, height: 3, canChangeIcon: true) {
-			tileAttribute ("device.currentState", key: "PRIMARY_CONTROL") {
+    	multiAttributeTile(name:"fanSpeed", type: "lighting", width: 3, height: 3, canChangeIcon: true) {
+			tileAttribute ("device.fanSpeed", key: "PRIMARY_CONTROL") {
 				attributeState "OFF", label:'${name}', action:"switch.on", icon:"st.Lighting.light24"
 				attributeState "LOW", label:'${name}', action:"switch.off", icon:"st.Lighting.light24", backgroundColor:"#00e676"
                 attributeState "HIGH", label:'${name}', action:"switch.off", icon:"st.Lighting.light24", backgroundColor:"#FF3D00"
@@ -45,9 +47,9 @@ metadata {
         	state "default", action:"refresh.refresh", icon: "st.secondary.refresh"
         }
         
-        main "switch"
+        main "fanSpeed"
         
-        details(["switch", "low", "high", "refresh"])
+        details(["fanSpeed", "low", "high", "refresh"])
     }
 }
 
@@ -106,7 +108,8 @@ def setFan(level) {
         body: body,
         "${ipHex}:${portHex}"
     ))
-    sendEvent(name: "currentState", value: level)
+    sendEvent(name: "currentState", value: level == "OFF" ? "off" : "on")
+    sendEvent(name: "fanSpeed", value: level)
 }
 
 // parse events into attributes
@@ -124,7 +127,8 @@ def parse(description) {
     log.debug "JSON '${json.fanSpeed}'"
     
     if (json.containsKey("fanSpeed")) {
-    	sendEvent(name: "currentState", value: json.fanSpeed)
+    	sendEvent(name: "fanSpeed", value: json.fanSpeed)
+        sendEvent(name: "currentState", value: json.fanSpeed == "OFF" ? "off" : "on")
     }
 }
 
