@@ -20,6 +20,15 @@ metadata {
         
         attribute "trackDescription", "string"
         
+        command "mute"
+        command "next"Track
+        command "pause"
+        command "play"
+        command "previous"Track
+        command "stop"
+        command "repeat"
+        command "shuffle"
+        
     }
     
     tiles(scale: 2) {

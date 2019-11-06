@@ -108,7 +108,7 @@ def setFan(level) {
         body: body,
         "${ipHex}:${portHex}"
     ))
-    sendEvent(name: "currentState", value: level == "OFF" ? "off" : "on")
+    sendEvent(name: "switch", value: level == "OFF" ? "off" : "on")
     sendEvent(name: "fanSpeed", value: level)
 }
 
@@ -128,7 +128,7 @@ def parse(description) {
     
     if (json.containsKey("fanSpeed")) {
     	sendEvent(name: "fanSpeed", value: json.fanSpeed)
-        sendEvent(name: "currentState", value: json.fanSpeed == "OFF" ? "off" : "on")
+        sendEvent(name: "switch", value: json.fanSpeed == "OFF" ? "off" : "on")
     }
 }
 
